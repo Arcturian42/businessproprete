@@ -71,9 +71,7 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-  },
+  // Favicon resolved automatically from app/icon.svg by Next.js.
 };
 
 export const viewport: Viewport = {

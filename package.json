@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Propreté Business — Le média des professionnels de la propreté",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
