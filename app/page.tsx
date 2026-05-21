@@ -1,64 +1,193 @@
 import Link from 'next/link';
+import {
+  BookOpen,
+  Calculator,
+  FileSpreadsheet,
+  Gauge,
+  TrendingUp,
+  Building2,
+} from 'lucide-react';
 
-import { SITE_NAME, SITE_TAGLINE } from '@/lib/seo/constants';
+import { CtaSection } from '@/components/content/cta-section';
+import { GuideCard } from '@/components/cards/guide-card';
+import { HeroSection } from '@/components/layout/hero-section';
+import { NewsletterForm } from '@/components/content/newsletter-form';
+import { StatsBar } from '@/components/local/stats-bar';
+import { ToolCard } from '@/components/cards/tool-card';
+import { SITE_NAME } from '@/lib/seo/constants';
+
+const SECTOR_STATS = [
+  { value: '21 Md€', label: 'CA du marché 2024' },
+  { value: '15 500', label: 'Entreprises de propreté' },
+  { value: '600 000+', label: 'Emplois en France' },
+  { value: '+6,9 %', label: 'Croissance annuelle (CAGR)' },
+];
+
+const FEATURED_GUIDES = [
+  {
+    href: '/guides/digitaliser-entreprise-nettoyage',
+    title: 'Digitaliser son entreprise de nettoyage',
+    description:
+      'Les étapes concrètes pour passer d’Excel + WhatsApp à un système opérationnel structuré.',
+    icon: TrendingUp,
+  },
+  {
+    href: '/reglementation/grille-salaire-proprete-2025',
+    title: 'Grille salariale propreté 2025',
+    description:
+      'Le détail des salaires minimaux par échelon (IDCC 3043), majorations et coût complet d’un agent.',
+    icon: FileSpreadsheet,
+  },
+  {
+    href: '/guides/calculer-prix-nettoyage-bureaux',
+    title: 'Calculer un prix de nettoyage de bureaux',
+    description:
+      'La méthode professionnelle pour bâtir un devis rentable au m² selon la fréquence et le type de locaux.',
+    icon: BookOpen,
+  },
+];
+
+const FREE_TOOLS = [
+  {
+    href: '/outils/calculateur-prix-nettoyage',
+    title: 'Calculateur de prix nettoyage',
+    description:
+      'Estimez en une minute le coût mensuel d’une prestation selon la surface, la fréquence et la ville.',
+    icon: Calculator,
+  },
+  {
+    href: '/outils/calculateur-rentabilite-contrat',
+    title: 'Rentabilité d’un contrat',
+    description:
+      'Calculez la marge réelle d’un contrat : coût agent, charges, déplacements, matériel.',
+    icon: Gauge,
+  },
+  {
+    href: '/outils/generateur-devis-nettoyage',
+    title: 'Générateur de devis',
+    description:
+      'Créez et téléchargez un devis professionnel en PDF avec vos coordonnées et logo.',
+    icon: FileSpreadsheet,
+  },
+];
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
-      <section className="bg-navy py-20 md:py-24">
+    <main>
+      <HeroSection
+        eyebrow={SITE_NAME}
+        title="Le média de référence du nettoyage professionnel en France."
+        description="Guides, données, comparatifs logiciels et outils gratuits pour les dirigeants d’entreprises de propreté B2B."
+        primary={{ label: 'Consulter les guides', href: '/guides' }}
+        secondary={{ label: 'Découvrir les outils', href: '/outils' }}
+      />
+
+      <StatsBar
+        stats={SECTOR_STATS}
+        source="Monde de la Propreté 2024, Transpire Insight 2025"
+        title="Le secteur en chiffres"
+      />
+
+      <section className="bg-surface py-16 md:py-20" aria-labelledby="guides-heading">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="font-mono text-sm uppercase tracking-wide text-brand-light">
-            {SITE_NAME}
-          </p>
-          <h1 className="mt-4 max-w-3xl text-hero-mobile md:text-hero text-text-ondark">
-            Le média de référence du nettoyage professionnel en France.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-border-dark">
-            {SITE_TAGLINE}. Guides, données, comparatifs logiciels et outils
-            gratuits pour les dirigeants d&apos;entreprises de propreté B2B.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
+          <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand">
+                Guides pratiques
+              </p>
+              <h2
+                id="guides-heading"
+                className="mt-2 text-3xl font-bold text-text-primary md:text-4xl"
+              >
+                Des ressources concrètes pour votre entreprise
+              </h2>
+            </div>
             <Link
               href="/guides"
-              className="inline-flex h-11 items-center rounded-button bg-brand px-6 text-sm font-semibold text-white shadow-card transition-colors duration-150 hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+              className="text-sm font-semibold text-brand transition-colors hover:text-brand-dark"
             >
-              Consulter les guides
+              Voir tous les guides →
             </Link>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {FEATURED_GUIDES.map((guide) => (
+              <GuideCard key={guide.href} {...guide} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-16 md:py-20" aria-labelledby="tools-heading">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-wide text-brand">
+                Outils gratuits
+              </p>
+              <h2
+                id="tools-heading"
+                className="mt-2 text-3xl font-bold text-text-primary md:text-4xl"
+              >
+                Calculez, simulez, générez en quelques clics
+              </h2>
+            </div>
             <Link
               href="/outils"
-              className="inline-flex h-11 items-center rounded-button border border-text-ondark px-6 text-sm font-semibold text-text-ondark transition-colors duration-150 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-text-ondark focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
+              className="text-sm font-semibold text-brand transition-colors hover:text-brand-dark"
             >
-              Découvrir les outils
+              Tous les outils →
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {FREE_TOOLS.map((tool) => (
+              <ToolCard key={tool.href} {...tool} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface py-16 md:py-20" aria-labelledby="annuaire-heading">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <span
+              className="flex h-12 w-12 items-center justify-center rounded-card bg-brand-light text-brand"
+              aria-hidden="true"
+            >
+              <Building2 className="h-6 w-6" />
+            </span>
+            <p className="text-sm font-semibold uppercase tracking-wide text-brand">
+              Annuaire
+            </p>
+            <h2
+              id="annuaire-heading"
+              className="text-3xl font-bold text-text-primary md:text-4xl"
+            >
+              Trouver une entreprise de nettoyage
+            </h2>
+            <p className="max-w-2xl text-base text-text-secondary">
+              Recherchez par ville, spécialité ou taille. Toutes les fiches
+              affichent SIRET, NAF, zone desservie et score de visibilité.
+            </p>
+            <Link
+              href="/annuaire"
+              className="mt-2 inline-flex h-11 items-center rounded-button border border-brand px-6 text-sm font-semibold text-brand transition-colors hover:bg-brand-light"
+            >
+              Consulter l&apos;annuaire
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-border-light bg-white py-12">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm font-medium uppercase tracking-wide text-text-muted">
-            Le secteur en chiffres
-          </p>
-          <dl className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-4">
-            <Stat value="21 Md€" label="CA du marché 2024" />
-            <Stat value="15 500" label="Entreprises de propreté" />
-            <Stat value="600 000+" label="Emplois en France" />
-            <Stat value="+6,9 %" label="Croissance annuelle (CAGR)" />
-          </dl>
-          <p className="mt-4 text-xs text-text-muted">
-            Sources : Monde de la Propreté 2024, Transpire Insight 2025.
-          </p>
+      <CtaSection
+        title="Ne manquez pas les mises à jour du secteur"
+        description="Un email par semaine avec les meilleurs articles, données et outils. Pas de spam, désinscription en un clic."
+        primary={{ label: "S'abonner gratuitement", href: '/newsletter' }}
+        trustNote="Rejoignez les dirigeants déjà abonnés"
+      >
+        <div className="mx-auto mt-8 max-w-md">
+          <NewsletterForm source="homepage" />
         </div>
-      </section>
+      </CtaSection>
     </main>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <dt className="font-mono text-data-md text-text-primary">{value}</dt>
-      <dd className="mt-1 text-sm text-text-muted">{label}</dd>
-    </div>
   );
 }

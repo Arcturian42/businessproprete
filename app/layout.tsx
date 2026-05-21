@@ -3,6 +3,8 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import Script from 'next/script';
 import { Toaster } from 'sonner';
 
+import { Footer } from '@/components/layout/footer';
+import { Header } from '@/components/layout/header';
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/seo/constants';
 import { organizationSchema } from '@/lib/schema/organization';
 import { websiteSchema } from '@/lib/schema/website';
@@ -93,7 +95,7 @@ export default function RootLayout({
       lang="fr"
       className={cn(inter.variable, jetbrainsMono.variable, 'scroll-smooth')}
     >
-      <body className="min-h-screen font-sans antialiased">
+      <body className="flex min-h-screen flex-col bg-background font-sans antialiased">
         <Script
           id="schema-organization"
           type="application/ld+json"
@@ -106,7 +108,17 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
         />
-        {children}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-toast focus:rounded-button focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Aller au contenu principal
+        </a>
+        <Header />
+        <div id="main" className="flex-1">
+          {children}
+        </div>
+        <Footer />
         <Toaster position="bottom-right" richColors closeButton />
       </body>
     </html>
