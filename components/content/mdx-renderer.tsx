@@ -142,6 +142,18 @@ const components: MDXRemoteProps['components'] = {
   FaqBlock,
 };
 
+/**
+ * NOTE on next-mdx-remote version: pinned to ^5 (not ^6) on purpose.
+ *
+ * GHSA-g4xw-jxrg-5f6m affects v5 by allowing arbitrary code execution
+ * when rendering UNTRUSTED MDX content. Our threat model excludes that:
+ * every MDX file is committed under /content/ by editorial authors —
+ * there is no user-uploaded MDX surface anywhere in the app.
+ *
+ * Upgrade to v6 was attempted (commits in chat history) and broke the
+ * custom-component prop forwarding used by BlufBox / FaqBlock & co
+ * during RSC serialization. Re-evaluate when v6 stabilises that API.
+ */
 export function MdxRenderer({ source }: { source: string }) {
   return (
     <MDXRemote
