@@ -1,14 +1,16 @@
 import type { MetadataRoute } from 'next';
 
+import { listGuides } from '@/lib/content/loader';
 import { PILOT_CITIES } from '@/lib/data/cities';
 import { canonicalUrl } from '@/lib/seo/canonical';
 
 /**
  * Dynamic XML sitemap.
- * Hub & static routes today; will gain article/profile entries
- * once MDX (Sprint 4) and Supabase seeds (Sprint 6) are wired.
+ * Aggregates static routes + MDX guides + 10 pilot city pages.
+ * Directory profile and software/comparison entries will plug in
+ * once Supabase is seeded with real records (Sprint 6+).
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticRoutes: Array<{
@@ -22,6 +24,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/logiciels', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/comparatifs', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/outils', changeFrequency: 'monthly', priority: 0.9 },
+    { path: '/outils/calculateur-prix-nettoyage', changeFrequency: 'monthly', priority: 0.85 },
+    { path: '/outils/calculateur-rentabilite-contrat', changeFrequency: 'monthly', priority: 0.85 },
+    { path: '/outils/generateur-devis-nettoyage', changeFrequency: 'monthly', priority: 0.85 },
+    { path: '/outils/recevoir-10-prospects-b2b', changeFrequency: 'monthly', priority: 0.85 },
     { path: '/annuaire', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/observatoire', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/ressources', changeFrequency: 'monthly', priority: 0.7 },
@@ -34,6 +40,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/politique-confidentialite', changeFrequency: 'yearly', priority: 0.2 },
     { path: '/cookies', changeFrequency: 'yearly', priority: 0.2 },
   ];
+
+  const guides = await listGuides('guides');
+  const guideRoutes = guides.map((guide) => ({
+    url: canonicalUrl(guide.path),
+    lastModified: new Date(guide.meta.dateModified ?? guide.meta.datePublished),
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }));
 
   const cityRoutes = PILOT_CITIES.map((city) => ({
     url: canonicalUrl(`/${city.slug}/societes-nettoyage`),
@@ -49,6 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: entry.changeFrequency,
       priority: entry.priority,
     })),
+    ...guideRoutes,
     ...cityRoutes,
   ];
 }
